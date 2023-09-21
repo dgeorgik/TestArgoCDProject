@@ -1,0 +1,42 @@
+# -- Deploy ArgoCD Applications within this helm release
+# @default -- `[]` (See [values.yaml])
+## Ref: https://github.com/argoproj/argo-cd/blob/master/docs/operator-manual/
+additionalApplications:
+  - name: apps
+    namespace: argocd
+    additionalLabels: {}
+    additionalAnnotations: {}
+    project: default
+    source:
+      repoURL: https://github.com/dgeorgik/TestArgoCDProject.git
+      targetRevision: master
+      path: apps
+      helm:
+        valueFiles:
+          - values.yaml
+    destination:
+      server: https://kubernetes.default.svc
+      namespace: argocd
+    syncPolicy:
+      automated:
+        prune: true
+  selfHeal: true
+  - name: infra
+    namespace: argocd
+    additionalLabels: {}
+    additionalAnnotations: {}
+    project: default
+    source:
+      repoURL: https://github.com/dgeorgik/TestArgoCDProject.git
+      targetRevision: master
+      path: infra
+      helm:
+        valueFiles:
+          - values.yaml
+    destination:
+      server: https://kubernetes.default.svc
+      namespace: argocd
+    syncPolicy:
+      automated:
+        prune: true
+        selfHeal: true
