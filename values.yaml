@@ -1,65 +1,84 @@
-# -- Deploy ArgoCD Applications within this helm release
-# @default -- `[]` (See [values.yaml])
-## Ref: https://github.com/argoproj/argo-cd/blob/master/docs/operator-manual/
-additionalApplications:
-  - name: apps
-    namespace: argocd
-    additionalLabels: {}
-    additionalAnnotations: {}
-    project: default
-    source:
-      repoURL: https://github.com/dgeorgik/TestArgoCDProject.git
-      targetRevision: master
-      path: apps
-      helm:
-        valueFiles:
-          - values.yaml
-    destination:
-      server: https://kubernetes.default.svc
-      namespace: argocd
-    syncPolicy:
-      automated:
-        prune: true
-  selfHeal: true
-  - name: infra
-    namespace: argocd
-    additionalLabels: {}
-    additionalAnnotations: {}
-    project: default
-    source:
-      repoURL: https://github.com/dgeorgik/TestArgoCDProject.git
-      targetRevision: master
-      path: infra
-      helm:
-        valueFiles:
-          - values.yaml
-    destination:
-      server: https://kubernetes.default.svc
-      namespace: argocd
-    syncPolicy:
-      automated:
-        prune: true
-        selfHeal: true
-
-
-namespaces: ['argocd', 'infra', 'monitoring', 'ingress-nginx']
-
-applications:
-  - name: argocd
-    namespace: argocd
-    chart: argo-cd
-    targetRevision: 3.33.6
-    repoURL: https://argoproj.github.io/argo-helm
-  - name: cert-manager
-    namespace: infra
-    chart: cert-manager
-    targetRevision: v1.8.0
-    repoURL: https://charts.jetstack.io
-  - name: tomcat
-    namespace: infra
-    chart: tomcat
-    targetRevision: 10.3.9
-    repoURL: https://charts.bitnami.com/bitnami
-
-
-
+## -- Deploy ArgoCD Applications within this helm release
+## @default -- `[]` (See [values.yaml])
+### Ref: https://github.com/argoproj/argo-cd/blob/master/docs/operator-manual/
+#additionalApplications:
+#  - name: apps
+#    namespace: argocd
+#    additionalLabels: {}
+#    additionalAnnotations: {}
+#    project: default
+#    source:
+#      repoURL: https://github.com/dgeorgik/TestArgoCDProject.git
+#      targetRevision: master
+#      path: apps
+#      helm:
+#        valueFiles:
+#          - values.yaml
+#    destination:
+#      server: https://kubernetes.default.svc
+#      namespace: argocd
+#    syncPolicy:
+#      automated:
+#        prune: true
+#  selfHeal: true
+#  - name: infra
+#    namespace: argocd
+#    additionalLabels: {}
+#    additionalAnnotations: {}
+#    project: default
+#    source:
+#      repoURL: https://github.com/dgeorgik/TestArgoCDProject.git
+#      targetRevision: master
+#      path: infra
+#      helm:
+#        valueFiles:
+#          - values.yaml
+#    destination:
+#      server: https://kubernetes.default.svc
+#      namespace: argocd
+#    syncPolicy:
+#      automated:
+#        prune: true
+#        selfHeal: true
+#
+#
+#namespaces: ['argocd', 'infra', 'monitoring', 'ingress-nginx']
+#
+#applications:
+#  - name: argocd
+#    namespace: argocd
+#    chart: argo-cd
+#    targetRevision: 3.33.6
+#    repoURL: https://argoproj.github.io/argo-helm
+#  - name: cert-manager
+#    namespace: infra
+#    chart: cert-manager
+#    targetRevision: v1.8.0
+#    repoURL: https://charts.jetstack.io
+#  - name: tomcat
+#    namespace: infra
+#    chart: tomcat
+#    targetRevision: 10.3.9
+#    repoURL: https://charts.bitnami.com/bitnami
+#
+#
+#
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: nginx
+  name: nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - image: nginx
+          name: nginx
