@@ -1,3 +1,5 @@
+import test.Test;
+
 /**
  * @author georgijpustovalov
  * @project TestArgoCDProject
@@ -6,6 +8,7 @@
 public class Main {
     public static void main(String[] args) {
         System.out.println("Hello");
-
+        Test test = new Test();
+        test.TestFunction();
     }
 }
